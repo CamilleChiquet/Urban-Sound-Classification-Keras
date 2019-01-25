@@ -80,10 +80,12 @@ def selectAudioFile():
     resized_image = colored_Image.resize(maxsize, Image.BOX)
 
     global spectrogram_image
-    global panel
+    global prediction_plot
+    global spectrogram_panel
+    global prediction_panel
     spectrogram_image = ImageTk.PhotoImage(resized_image)
-    panel.configure(image=spectrogram_image)
-    panel.pack(side="top", fill="both", expand="yes")
+    spectrogram_panel.configure(image=spectrogram_image)
+    spectrogram_panel.pack(side="top", fill="both", expand="yes")
 
     model = load_model(MODELS_DIR + 'saved_model.h5')
     data = np.reshape(spectrogram, (1, spectrogram.shape[-2], spectrogram.shape[-1], 1))
@@ -98,11 +100,20 @@ def selectAudioFile():
     plt.colorbar(plot)
     plt.bar(classes, prediction, color=colors)
     plt.xticks(rotation=45)
-    plt.show()
+    plt.subplots_adjust(bottom=0.25)
+
+    plot_path = 'plot.png'
+    plt.savefig(plot_path)
+
+    plot_img = Image.open(plot_path)
+    prediction_plot = ImageTk.PhotoImage(plot_img)
+    prediction_panel.configure(image=prediction_plot)
+    prediction_panel.pack(side="top", fill="both", expand="yes")
 
 
 root = tk.Tk()
 spectrogram_image = None
+prediction_plot = None
 
 button_filedialog = tk.Button(root, text="Select audio", command=selectAudioFile)
 button_filedialog.pack(pady=3)
@@ -113,7 +124,8 @@ button_playaudio.pack(pady=3)
 label_audiofile = tk.Label(root, text="audio file")
 label_audiofile.pack(pady=3)
 
-panel = tk.Label(root, image=spectrogram_image)
+spectrogram_panel = tk.Label(root, image=spectrogram_image)
+prediction_panel = tk.Label(root, image=prediction_plot)
 audio_file = None
 
 root.mainloop()
