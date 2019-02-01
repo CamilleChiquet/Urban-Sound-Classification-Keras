@@ -10,26 +10,28 @@ import librosa.display
 
 
 def convert_category_to_name(category):
-	if category == '0':
+	if category == '0' or category == 0:
 		return 'air_conditioner'
-	elif category == '1':
+	elif category == '1'  or category == 1:
 		return 'car_horn'
-	elif category == '2':
+	elif category == '2'  or category == 2:
 		return 'children_playing'
-	elif category == '3':
+	elif category == '3' or category == 3:
 		return 'dog_bark'
-	elif category == '4':
+	elif category == '4' or category == 4:
 		return 'drilling'
-	elif category == '5':
+	elif category == '5' or category == 5:
 		return 'engine_idling'
-	elif category == '6':
+	elif category == '6' or category == 6:
 		return 'gun_shot'
-	elif category == '7':
+	elif category == '7' or category == 7:
 		return 'jackhammer'
-	elif category == '8':
+	elif category == '8' or category == 8:
 		return 'siren'
-	elif category == '9':
+	elif category == '9' or category == 9:
 		return 'street_music'
+	else:
+		raise ValueError(f'The category : {category} doesn\'t exist')
 
 
 def visualize_melspectrogram(spectrogram, category):
