@@ -14,12 +14,19 @@ def swish(x):
 
 def basic_cnn(num_classes, input_shape):
     model = Sequential()
-    model.add(Conv2D(8, kernel_size=(3, 3), activation='relu', input_shape=input_shape, padding='same'))
-    model.add(Conv2D(8, kernel_size=(3, 3), activation='relu', input_shape=input_shape, padding='same'))
+    model.add(Conv2D(8, kernel_size=(4, 4), activation='relu', input_shape=input_shape, padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.5))
-    model.add(Conv2D(16, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(16, kernel_size=(4, 4), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', padding='same'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.5))
@@ -30,7 +37,39 @@ def basic_cnn(num_classes, input_shape):
     model.add(Flatten())
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+    return model
+
+
+# On Urban Sound dataset
+# no pre-processing or data-augmentation, only basic spectrograms of shape (92, 193) of 4s audio files
+# 89th iteration accuracy : 0.77460
+def cnn1(num_classes, input_shape):
+    model = Sequential()
+    model.add(Conv2D(8, kernel_size=(4, 4), activation='relu', input_shape=input_shape, padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Conv2D(16, kernel_size=(4, 4), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    model.add(Dense(num_classes, activation='softmax'))
+
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
     return model
 
 def test(input_shape, num_labels):

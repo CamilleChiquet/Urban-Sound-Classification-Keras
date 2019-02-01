@@ -1,7 +1,5 @@
 from keras.callbacks import ModelCheckpoint
-
 import audio_processing
-from models import *
 import numpy as np
 from const import *
 import matplotlib.pyplot as plt
@@ -26,7 +24,7 @@ def normalize_data(data):
 
 
 batch_size = 16
-epochs = 100
+epochs = 200
 num_classes = labels.shape[-1]
 
 spectrograms_rows = data.shape[1]
@@ -38,12 +36,12 @@ data = data.reshape(data.shape[0], spectrograms_rows, spectrograms_columns, 1)
 input_shape = (spectrograms_rows, spectrograms_columns, 1)
 
 # filepath = MODELS_DIR + "weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
-filepath = MODELS_DIR + "best-model-73.hdf5"
+filepath = MODELS_DIR + "best-model.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 callbacks_list = [checkpoint]
 
 model = basic_cnn(num_classes=num_classes, input_shape=input_shape)
-
+# model.load_weights(MODELS_DIR + 'best-model.hdf5')
 history = model.fit(data, labels, batch_size=batch_size, epochs=epochs, validation_split=0.1, shuffle=True, verbose=2, callbacks=callbacks_list)
 # model.save(MODELS_DIR + 'saved_model.h5')
 

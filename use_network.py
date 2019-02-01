@@ -13,7 +13,6 @@ from models.cnn import basic_cnn
 from utils import normalize_data
 
 
-
 class MyGUI:
     def __init__(self):
         self.root = tk.Tk()
@@ -42,9 +41,6 @@ class MyGUI:
 
         self.prediction_panel = tk.Label(self.root, image=self.prediction_plot)
         self.prediction_panel.pack(pady=3)
-
-
-
 
         self.root.mainloop()
 
@@ -94,14 +90,11 @@ class MyGUI:
 
         self.label_prediction['text'] = prediction
 
-        classes = ['Air conditioner', 'Car horn', 'Children playing', 'Dog bark', 'Drilling', 'Engine idling',
-                   'Gun shot', 'Jackhammer', 'Siren', 'Street music']
-
         colors = cm.plasma(y_probabilities / float(max(y_probabilities)))
         plot = plt.scatter(y_probabilities, y_probabilities, c=y_probabilities, cmap='plasma')
         plt.clf()
         plt.colorbar(plot)
-        plt.bar(classes, y_probabilities, color=colors)
+        plt.bar(CLASSES, y_probabilities, color=colors)
         plt.xticks(rotation=45)
         plt.subplots_adjust(bottom=0.25)
 
