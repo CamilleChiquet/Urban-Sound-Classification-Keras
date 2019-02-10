@@ -22,6 +22,7 @@ class MyGUI:
         self.prediction_plot = None
         self.audio_file = None
         self.model = None
+        self.prediction_revealed = True
 
         self.init_model()
 
@@ -39,26 +40,21 @@ class MyGUI:
         # Label which displays the category of the loaded audio file
         self.label_audiofile = tk.Label(self.root, text="", font="Helvetica 16 bold")
         self.label_audiofile.pack(pady=3, in_=self.frame)
-        self.hide_widget(self.label_audiofile)
 
         # Display the spectrogram of the loaded audio file
         self.spectrogram_panel = tk.Label(self.root, image=self.spectrogram_image)
         self.spectrogram_panel.pack(pady=3, in_=self.frame)
-        self.hide_widget(self.spectrogram_panel)
 
         # A button used to show or hide the prediction
         self.button_reveal = tk.Button(self.root, text="REVEAL/HIDE", font="Helvetica 16 bold",
                                        command=self.reveal_or_hide_prediction)
         self.button_reveal.pack(pady=8, in_=self.frame, side="bottom")
-        self.prediction_revealed = False
 
         self.label_prediction = tk.Label(self.root, text="", font="Helvetica 16 bold")
         self.label_prediction.pack(pady=3, in_=self.frame, side="bottom")
-        self.hide_widget(self.label_prediction)
 
         self.prediction_panel = tk.Label(self.root, image=self.prediction_plot)
         self.prediction_panel.pack(pady=3, in_=self.frame, side="bottom")
-        self.hide_widget(self.prediction_panel)
 
         self.root.mainloop()
 
@@ -98,10 +94,12 @@ class MyGUI:
         self.root.filename = filedialog.askopenfilename(
             initialdir="C:\\Users\\NNED\\PycharmProjects\\urban_sound_classification\\data\\audio\\fold1",
             title="Select file", filetypes=(("wav files", "*.wav"), ("all files", "*.*")))
+        if self.root.filename is None or self.root.filename is '':
+            return
         self.audio_file = self.root.filename
 
         category = self.audio_file.split("-")[-3]
-        self.label_audiofile['text'] = 'Category : ' + convert_category_to_name(category).replace('_', ' ')
+        self.label_audiofile['text'] = 'File : ' + self.audio_file.split('/')[-1] + '\nCategory : ' + convert_category_to_name(category).replace('_', ' ')
         # Load the choosen audio file
         signal, sample_rate = librosa.load(self.root.filename, sr=None)
         # Generate the audio file's spectrogram
