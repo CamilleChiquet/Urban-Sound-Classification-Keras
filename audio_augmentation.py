@@ -13,7 +13,7 @@ def tmp_path(ext=''):
     return tf.name + ext
 
 
-def add_noise(x, power=0.005):
+def add_noise(x, power):
     """
 	Add noise to audio data
 	"""
@@ -45,43 +45,72 @@ def apply_gain(x, gain):
     return x
 
 
-def generate_audio_augmentation():
-    augmented_audio_dir = AUGMENTED_AUDIO_DIR + 'augmented_audio\\'
-
-    classroom, sr_classroom = librosa.load('ir_classroom.wav')
-    smartphone, sr_smartphone = librosa.load('ir_smartphone_mic.wav')
-
+def generate_noise_augmentation(target_directory, input_directory):
     audio_file_extension = ".wav"
 
-    for root, dirs, files in os.walk(AUDIO_DIR):
+    for root, dirs, files in os.walk(input_directory):
         for file in files:
             if file.endswith(audio_file_extension):
                 audio_path = os.path.join(root, file)
                 signal, sample_rate = librosa.load(audio_path, sr=None)
 
-                librosa.output.write_wav(AUGMENTED_AUDIO_DIR, 'noise\\' + file, add_noise(signal),
-                                         sample_rate)
+                energy = np.sum(librosa.feature.rmse(y=signal, hop_length=int(sample_rate / 48)))
+                # print(f'file : {file} energy : {energy}')
 
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'conv_classroom' + + file,
-                #                          convolve(signal, classroom, 0.5), sample_rate)
-                #
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'conv_smartphone' + + file,
-                #                          convolve(signal, smartphone, 0.5), sample_rate)
-                #
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'gain' + file, apply_gain(signal, 10),
-                #                          sample_rate)
-                #
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'faster' + file, time_stretch(signal, 1.2),
-                #                          sample_rate)
-                #
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'slower' + file, time_stretch(signal, 0.88),
-                #                          sample_rate)
-                #
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'pitch_shifting_m2' + file,
-                #                          pitch_shift(signal, sample_rate, -2), sample_rate)
-                #
-                # librosa.output.write_wav(AUGMENTED_AUDIO_DIR + 'pitch_shifting_p2' + file,
-                #                          pitch_shift(signal, sample_rate, 2), sample_rate)
+                librosa.output.write_wav(target_directory + '/' + file, add_noise(signal, power=0.001 * energy), sample_rate)
 
 
-generate_audio_augmentation()
+def generate_conv_augmentation(target_directory, input_directory):
+    classroom, sr_classroom = librosa.load('ir_classroom.wav')
+    smartphone, sr_smartphone = librosa.load('ir_smartphone_mic.wav')
+
+    audio_file_extension = ".wav"
+
+    for root, dirs, files in os.walk(input_directory):
+        for file in files:
+            if file.endswith(audio_file_extension):
+                audio_path = os.path.join(root, file)
+                signal, sample_rate = librosa.load(audio_path, sr=None)
+
+                librosa.output.write_wav(target_directory + '/' + file, convolve(signal, classroom, 0.5), sample_rate)
+                librosa.output.write_wav(target_directory + '/' + file, convolve(signal, smartphone, 0.5), sample_rate)
+
+
+def generate_gain_augmentation(target_directory, input_directory):
+    audio_file_extension = ".wav"
+
+    for root, dirs, files in os.walk(input_directory):
+        for file in files:
+            if file.endswith(audio_file_extension):
+                audio_path = os.path.join(root, file)
+                signal, sample_rate = librosa.load(audio_path, sr=None)
+
+                librosa.output.write_wav(target_directory, apply_gain(signal, 10), sample_rate)
+
+
+def generate_time_stretch_augmentation(target_directory, input_directory):
+    audio_file_extension = ".wav"
+
+    for root, dirs, files in os.walk(input_directory):
+        for file in files:
+            if file.endswith(audio_file_extension):
+                audio_path = os.path.join(root, file)
+                signal, sample_rate = librosa.load(audio_path, sr=None)
+
+                librosa.output.write_wav(target_directory, time_stretch(signal, 1.2), sample_rate)
+
+                librosa.output.write_wav(target_directory, time_stretch(signal, 0.88), sample_rate)
+
+
+def generate_pitch_shifting_augmentation(target_directory, input_directory):
+    audio_file_extension = ".wav"
+
+    for root, dirs, files in os.walk(input_directory):
+        for file in files:
+            if file.endswith(audio_file_extension):
+                audio_path = os.path.join(root, file)
+                signal, sample_rate = librosa.load(audio_path, sr=None)
+
+                librosa.output.write_wav(target_directory, pitch_shift(signal, sample_rate, -2), sample_rate)
+
+                librosa.output.write_wav(target_directory, pitch_shift(signal, sample_rate, 2), sample_rate)

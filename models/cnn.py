@@ -8,6 +8,7 @@ from keras.utils.generic_utils import get_custom_objects
 import keras
 
 
+# Google's special function
 def swish(x):
     return K.sigmoid(x) * x
 
@@ -40,11 +41,23 @@ def basic_cnn(num_classes, input_shape):
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
     return model
 
-
 # On Urban Sound dataset
-# no pre-processing or data-augmentation, only basic spectrograms of shape (92, 193) of 4s audio files
+
+# ========== parameters ===========
+# spectrograms of shape (92, 193) of 4s audio files
+# batch size = 16
+# no pre-processing
+
+# ========== without data augmentation ===========
+# no data-augmentation, only basic spectrograms of shape (92, 193) of 4s audio files
 # 89th iteration accuracy : 0.77460
-def cnn1(num_classes, input_shape):
+
+# ========== with data augmentation ===========
+# data-augmentation : 1 file created for each original file with noise added
+# 1/10 spectrograms (873) as validation datas (spectrograms from original files, not augmented ones)
+# training data : 8732 - 873  original-spectrograms + 8732 - 873 noise-spectrograms
+# 182th iteration accuracy : 0.79092
+def cnn2(num_classes, input_shape):
     model = Sequential()
     model.add(Conv2D(8, kernel_size=(4, 4), activation='relu', input_shape=input_shape, padding='same'))
     model.add(BatchNormalization())
