@@ -25,9 +25,8 @@ On the 8732 urban sounds, 10% were used as validation data. The augmented files 
  ![GUI](images/GUI.PNG)
  
  ## TODO
- - Test other data augmentations (some are already implemented in the code but not yet tested).
+ - Test other data augmentations for specific classes.
  - Try RNN architectures (LSTM or GRU)
- - Try different technics for audio filtering (many audio files contain parasite noises that are sometimes far louder than the file's sound category).
 
 ## Libraries
 - tensorflow[-gpu]
@@ -40,4 +39,4 @@ On the 8732 urban sounds, 10% were used as validation data. The augmented files 
 
 ## Notes
 
-On a laptop with a GTX 1080 : approximately 40 minutes for 200 iterations.
+On a laptop with a GTX 1080 : approximately 70 minutes for 200 iterations.
