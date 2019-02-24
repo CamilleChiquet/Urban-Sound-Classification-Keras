@@ -1,12 +1,12 @@
-# Urban Sound Classification Keras
+# Urban Sound Classification Keras  
+
 Neural network on urban sound classification task using Keras.  
-You can find the dataset used for this project [here](https://urbansounddataset.weebly.com/).  
+You can find the public dataset used for this project [here](https://urbansounddataset.weebly.com/).  
 
 ## Results
-Without data augmentation, the network is able to achieve a score of **76% accuracy**.
-
-Creating new audio files by adding noise to original ones helps the network to get to **79% accuracy**.
-![training](./training.png)
+Used data-augmentations for final result : white noise.  
+On 10 trainings, the network achieve a **maximum accuracy of 84.3%** with a mean accuracy of 82.6% (min 80.4%).  
+![training](images/min80.4-max84.3-mean82.6.png)
 
 On the 8732 urban sounds, 10% were used as validation data. The augmented files that were generated from these 10% were
  not used for training (nor for validation).
@@ -22,7 +22,7 @@ On the 8732 urban sounds, 10% were used as validation data. The augmented files 
  - The network prediction is displayed.
  - You can challenge colleagues or friends to do better than the network by hiding the spectrogram and prediction.
  
- ![GUI](./GUI.PNG)
+ ![GUI](images/GUI.PNG)
  
  ## TODO
  - Test other data augmentations (some are already implemented in the code but not yet tested).

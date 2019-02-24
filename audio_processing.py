@@ -48,7 +48,6 @@ def calculate_spectrogram(signal, sample_rate, window_size=4.0, nb_filters=92):
 def generate_spectrograms(audio_directory=AUDIO_DIR, display_spectrums=False, verbose=False, window_size=4.0,
                           nb_filters=92, name_prefix='', audio_file_extension=".wav", output_dir=SPECTROGRAMS_DIR):
     '''
-
     :param audio_directory: directory where it gets the audio files to analyze
     :param display_spectrums:
     :param verbose:
@@ -56,7 +55,6 @@ def generate_spectrograms(audio_directory=AUDIO_DIR, display_spectrums=False, ve
     :param nb_filters: number of rows for spectrograms
     :param name_prefix: names' prefix of the generated data
     :param audio_file_extension: type of audio files
-    :return:
     '''
     data = []
     labels = []
@@ -64,6 +62,7 @@ def generate_spectrograms(audio_directory=AUDIO_DIR, display_spectrums=False, ve
     for root, dirs, files in os.walk(audio_directory):
         for file in files:
             if file.endswith(audio_file_extension):
+                # For the UrbanSound dataset, the category of the audio file can be extracted as follows
                 category = file.split("-")[-3]
                 category = convert_category_to_name(category)
 
