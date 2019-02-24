@@ -9,7 +9,7 @@ import numpy as np
 from PIL import ImageOps, Image
 import os
 from const import *
-from models.cnn import basic_cnn
+from models.cnn import cnn
 from utils import normalize_data
 
 
@@ -61,8 +61,8 @@ class MyGUI:
     def init_model(self):
         input_shape = (92, 193, 1)
         # Load the model for the first time only
-        self.model = basic_cnn(NB_CLASSES, input_shape)
-        self.model.load_weights(MODELS_DIR + 'best-model.hdf5')
+        self.model = cnn(NB_CLASSES, input_shape)
+        self.model.load_weights(MODELS_DIR + 'best-model-84.3.hdf5')
 
     def show_widget(self, widget):
         widget.lift(self.frame)
